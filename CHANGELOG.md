@@ -137,6 +137,7 @@ Deprecated names
   ∈⇒∣product   ↦  Data.Nat.ListAction.Properties.∈⇒∣product
   product≢0    ↦  Data.Nat.ListAction.Properties.product≢0
   ∈⇒≤product   ↦  Data.Nat.ListAction.Properties.∈⇒≤product
+  ∷-ʳ++-eqFree ↦  Data.List.Properties.ʳ++-ʳ++-eqFree
   ```
 
 * In `Data.List.Relation.Binary.Permutation.Propositional.Properties`:
@@ -148,6 +149,11 @@ Deprecated names
 * In `Data.Product.Function.Dependent.Setoid`:
   ```agda
   left-inverse ↦ rightInverse
+  ```
+
+* In `Data.Product.Nary.NonDependent`:
+  ```agda
+  Allₙ ↦ Pointwiseₙ
   ```
 
 New modules
@@ -172,6 +178,8 @@ New modules
 * `Relation.Binary.Morphism.Construct.Product` to plumb in the (categorical) product structure on `RawSetoid`.
 
 * `Relation.Binary.Properties.PartialSetoid` to systematise properties of a PER
+
+* `Relation.Nullary.Recomputable.Core`
 
 Additions to existing modules
 -----------------------------
@@ -359,6 +367,23 @@ Additions to existing modules
     LeftInverse (I ×ₛ A) (J ×ₛ B)
   ```
 
+* In `Data.Vec.Properties`:
+  ```agda
+  toList-injective : ∀ {m n} → .(m=n : m ≡ n) → (xs : Vec A m) (ys : Vec A n) → toList xs ≡ toList ys → xs ≈[ m=n ] ys
+
+  toList-∷ʳ : ∀ x (xs : Vec A n) → toList (xs ∷ʳ x) ≡ toList xs List.++ List.[ x ]
+
+  fromList-reverse : (xs : List A) → (fromList (List.reverse xs)) ≈[ List.length-reverse xs ] reverse (fromList xs)
+
+  fromList∘toList : ∀  (xs : Vec A n) → fromList (toList xs) ≈[ length-toList xs ] xs
+  ```
+
+* In `Data.Product.Nary.NonDependent`:
+  ```agda
+  HomoProduct′ n f = Product n (stabulate n (const _) f)
+  HomoProduct  n A = HomoProduct′ n (const A)
+  ```
+
 * In `Data.Vec.Relation.Binary.Pointwise.Inductive`:
   ```agda
   zipWith-assoc : Associative _∼_ f → Associative (Pointwise _∼_) (zipWith {n = n} f)
@@ -368,6 +393,13 @@ Additions to existing modules
   zipWith-cong : Congruent₂ _∼_ f → Pointwise _∼_ ws xs → Pointwise _∼_ ys zs → Pointwise _∼_ (zipWith f ws ys) (zipWith f xs zs)
   ```
 
+* In `Function.Nary.NonDependent.Base`:
+  ```agda
+  lconst l n = ⨆ l (lreplicate l n)
+  stabulate : ∀ n → (f : Fin n → Level) → (g : (i : Fin n) → Set (f i)) → Sets n (ltabulate n f)
+  sreplicate : ∀ n → Set a → Sets n (lreplicate n a)
+  ```
+
 * In `Relation.Binary.Construct.Add.Infimum.Strict`:
   ```agda
   <₋-accessible-⊥₋ : Acc _<₋_ ⊥₋
@@ -375,10 +407,17 @@ Additions to existing modules
   <₋-wellFounded   : WellFounded _<_ → WellFounded _<₋_
   ```
 
+* In `Relation.Nullary.Decidable`:
+  ```agda
+  dec-yes-recompute : (a? : Dec A) → .(a : A) → a? ≡ yes (recompute a? a)
+  ```
+
 * In `Relation.Nullary.Decidable.Core`:
   ```agda
   ⊤-dec : Dec {a} ⊤
   ⊥-dec : Dec {a} ⊥
+  recompute-irrelevant-id : (a? : Decidable A) → Irrelevant A →
+                            (a : A) → recompute a? a ≡ a
   ```
 
 * In `Relation.Unary`:
@@ -404,6 +443,7 @@ Additions to existing modules
   ```agda
   ⊤-reflects : Reflects (⊤ {a}) true
   ⊥-reflects : Reflects (⊥ {a}) false
+  ```
 
 * In `Data.List.Relation.Unary.AllPairs.Properties`:
   ```agda
